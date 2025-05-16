@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
@@ -16,7 +17,6 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Menu, X } from "lucide-react";
 
 const navigation = [
-  { name: "Home", href: "/" },
   { name: "Categories", href: "/categories" },
   { name: "About", href: "/about" },
 ];
@@ -25,8 +25,7 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [location] = useLocation();
 
-  // Use try-catch to safely handle the context not being available yet
-  let auth: { user: any; logoutMutation: { mutate: () => void; isPending: boolean } } = { 
+  let auth = { 
     user: null, 
     logoutMutation: { mutate: () => {}, isPending: false } 
   };
