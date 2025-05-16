@@ -24,9 +24,9 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [location] = useLocation();
 
-  let auth = { 
-    user: null, 
-    logoutMutation: { mutate: () => {}, isPending: false } 
+  let auth = {
+    user: null,
+    logoutMutation: { mutate: () => {}, isPending: false }
   };
 
   try {
