@@ -10,12 +10,13 @@ import { Toaster } from "@/components/ui/toaster";
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        <AuthProvider>
+    <AuthProvider>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <App />
-        </AuthProvider>
-      </ThemeProvider>
-    </QueryClientProvider>
+          <Toaster />
+        </ThemeProvider>
+      </QueryClientProvider>
+    </AuthProvider>
   </React.StrictMode>
 );
