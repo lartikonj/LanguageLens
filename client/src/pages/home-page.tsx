@@ -153,8 +153,80 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Categories Section */}
+      {/* Featured Articles */}
+      <section className="py-12 bg-gray-50 dark:bg-gray-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+              Featured Articles
+            </h2>
+            <Link href="/featured">
+              <Button variant="outline">View All</Button>
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {isLoading ? (
+              <div className="col-span-3 flex justify-center py-10">
+                <Loader2 className="h-8 w-8 animate-spin text-primary-500" />
+              </div>
+            ) : (
+              categories?.slice(0, 3).map((category) => (
+                <ArticleCard
+                  key={category.id}
+                  id={category.id}
+                  slug={category.slug}
+                  title={category.name}
+                  description={category.description}
+                  category={{ name: "Featured", slug: "featured" }}
+                  imageUrl="/placeholder.jpg"
+                  views={1000}
+                  numLanguages={5}
+                />
+              ))
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Popular Content */}
       <section className="py-12 bg-white dark:bg-gray-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+              Popular Content
+            </h2>
+            <Link href="/popular">
+              <Button variant="outline">View All</Button>
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {isLoading ? (
+              <div className="col-span-3 flex justify-center py-10">
+                <Loader2 className="h-8 w-8 animate-spin text-primary-500" />
+              </div>
+            ) : (
+              categories?.slice(0, 3).map((category) => (
+                <ArticleCard
+                  key={category.id}
+                  id={category.id}
+                  slug={category.slug}
+                  title={category.name}
+                  description={category.description}
+                  category={{ name: "Popular", slug: "popular" }}
+                  imageUrl="/placeholder.jpg"
+                  views={2000}
+                  numLanguages={5}
+                />
+              ))
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Categories Section */}
+      <section className="py-12 bg-gray-50 dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h2 className="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
