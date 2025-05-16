@@ -169,7 +169,10 @@ export default function CategoryPage() {
             </div>
           </div>
           
-          {/* Articles Grid */}
+          {/* Category Content */}
+<CategoryContent category={slug} />
+
+{/* Articles Grid */}
           {isLoading ? (
             <div className="flex justify-center py-12">
               <Loader2 className="h-12 w-12 animate-spin text-primary-500" />
