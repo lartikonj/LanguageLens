@@ -1093,7 +1093,7 @@ export class MemStorage implements IStorage {
               notes: 'Üben Sie diese Phrasen, bevor Sie einen lokalen Markt besuchen.'
             }
           }
-        }        }
+        }
       ],
       'at-the-airport': [
         {
@@ -2008,7 +2008,7 @@ export class MemStorage implements IStorage {
   async getPendingArticles(): Promise<ArticleWithTranslation[]> {
     const pendingArticles = Array.from(this.articlesStore.values())
       .filter(article => article.status === 'pending');
-    
+
     const result: ArticleWithTranslation[] = [];
     for (const article of pendingArticles) {
       const articleWithTranslation = await this.getArticleBySlug(article.slug, 'en');
