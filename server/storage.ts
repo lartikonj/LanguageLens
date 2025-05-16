@@ -97,9 +97,9 @@ export class MemStorage implements IStorage {
   private commentsStore: Map<number, Comment>;
   private likesStore: Map<number, Like>;
   private savedArticlesStore: Map<number, SavedArticle>;
-  
+
   sessionStore: session.SessionStore;
-  
+
   private currentUserId: number = 1;
   private currentLanguageId: number = 1;
   private currentCategoryId: number = 1;
@@ -121,11 +121,11 @@ export class MemStorage implements IStorage {
     this.commentsStore = new Map();
     this.likesStore = new Map();
     this.savedArticlesStore = new Map();
-    
+
     this.sessionStore = new MemoryStore({
       checkPeriod: 86400000, // prune expired entries every 24h
     });
-    
+
     // Initialize with default data
     this.initializeData();
   }
@@ -139,9 +139,9 @@ export class MemStorage implements IStorage {
       { code: 'es', name: 'Spanish', nativeName: 'Español', rtl: false },
       { code: 'de', name: 'German', nativeName: 'Deutsch', rtl: false },
     ];
-    
+
     const languageMap = new Map<string, number>();
-    
+
     languages.forEach(lang => {
       const id = this.currentLanguageId++;
       this.languagesStore.set(id, {
@@ -346,9 +346,9 @@ export class MemStorage implements IStorage {
         slug: categoryData.slug,
         createdAt: new Date(),
       };
-      
+
       this.categoriesStore.set(categoryId, category);
-      
+
       // Add translations for each language
       Object.entries(categoryData.translations).forEach(([langCode, translation]) => {
         const langId = languageMap.get(langCode);
@@ -359,12 +359,12 @@ export class MemStorage implements IStorage {
           this.categoryTranslationsStore.get(categoryId)?.set(langId, translation);
         }
       });
-      
+
       // Add subjects for each category
       this.addSubjectsForCategory(categoryId, categoryData.slug, languageMap);
     });
   }
-  
+
   private addSubjectsForCategory(categoryId: number, categorySlug: string, languageMap: Map<string, number>): void {
     const subjectsData: { [key: string]: any } = {
       'daily-conversations': [
@@ -500,7 +500,7 @@ export class MemStorage implements IStorage {
         },
       ],
     };
-    
+
     if (subjectsData[categorySlug]) {
       subjectsData[categorySlug].forEach((subjectData: any) => {
         const subjectId = this.currentSubjectId++;
@@ -510,9 +510,9 @@ export class MemStorage implements IStorage {
           categoryId: categoryId,
           createdAt: new Date(),
         };
-        
+
         this.subjectsStore.set(subjectId, subject);
-        
+
         // Add translations for each language
         Object.entries(subjectData.translations).forEach(([langCode, translation]) => {
           const langId = languageMap.get(langCode);
@@ -523,13 +523,13 @@ export class MemStorage implements IStorage {
             this.subjectTranslationsStore.get(subjectId)?.set(langId, translation as { name: string; description?: string });
           }
         });
-        
+
         // Add articles for this subject
         this.addArticlesForSubject(subjectId, subjectData.slug, languageMap);
       });
     }
   }
-  
+
   private addArticlesForSubject(subjectId: number, subjectSlug: string, languageMap: Map<string, number>): void {
     // Sample article content for each subject
     const articlesData: { [key: string]: any } = {
@@ -623,7 +623,7 @@ export class MemStorage implements IStorage {
                 <li><strong>Subject line:</strong> Should be clear, concise, and specific, e.g., "Meeting Request: Q3 Budget Review"</li>
                 <li><strong>Salutation:</strong> "Dear [Name]," (formal), "Hello [Name]," (semi-formal), "Hi [Name]," (informal)</li>
                 <li><strong>Opening:</strong> "I hope this email finds you well.", "I'm writing regarding..."</li>
-                <li><strong>Body:</strong> Keep paragraphs short and focused on one topic each</li>
+                <li><strong>Body: Keep paragraphs short and focused on one topic each</li>
                 <li><strong>Closing:</strong> "Thank you for your consideration.", "I look forward to your response."</li>
                 <li><strong>Sign-off:</strong> "Best regards,", "Sincerely,", "Kind regards,"</li>
               </ul>
@@ -1068,7 +1068,7 @@ export class MemStorage implements IStorage {
               notes: 'Üben Sie diese Phrasen, bevor Sie einen lokalen Markt besuchen.'
             }
           }
-        }
+        }        }
       ],
       'at-the-airport': [
         {
@@ -1508,7 +1508,7 @@ export class MemStorage implements IStorage {
               <p>Feiertage und Festivals bieten ein wunderbares Fenster in die Werte, Geschichte und Traditionen einer Kultur. Hier ist ein Überblick über einige wichtige Feierlichkeiten auf der ganzen Welt.</p>
               <h3>Bemerkenswerte Feiertage nach Land/Region</h3>
               <ul>
-                <li><strong>Chinesisches Neujahr:</strong> Der wichtigste Feiertag in der chinesischen Kultur, der den Beginn des Mondneujahrs mit Familientreffen, besonderen Mahlzeiten und roten Dekorationen für Glück markiert.</li>
+                <li><strong>Chinesisches Neujahr:</strong> Der wichtigste Feiertag in der chinesischen Kultur, der den Beginn des Mondneujahrs mit Familientreffen,besonderen Mahlzeiten und roten Dekorationen für Glück markiert.</li>
                 <li><strong>Diwali (Indien):</strong> Das Lichterfest, das von Hindus, Jains und Sikhs gefeiert wird und mit Lampen, Feuerwerk und Süßigkeiten den Sieg des Lichts über die Dunkelheit symbolisiert.</li>
                 <li><strong>Ramadan & Eid al-Fitr (Islamisch):</strong> Ein Monat des Fastens, gefolgt von einem Festmahl, das spirituelle Reflexion und Gemeinschaft betont.</li>
                 <li><strong>Karneval (Brasilien, Venedig, New Orleans):</strong> Festivitäten vor der Fastenzeit mit Paraden, Musik, Tanz und aufwendigen Kostümen.</li>
@@ -1607,7 +1607,7 @@ export class MemStorage implements IStorage {
       articlesData[subjectSlug].forEach((articleData: any) => {
         const articleId = this.currentArticleId++;
         const authorId = 1; // Default to first user
-        
+
         const article = {
           id: articleId,
           slug: articleData.slug,
@@ -1619,9 +1619,9 @@ export class MemStorage implements IStorage {
           title: '', // Will be set from translations
           content: '', // Will be set from translations
         };
-        
+
         this.articlesStore.set(articleId, article);
-        
+
         // Add translations for each language
         Object.entries(articleData.translations).forEach(([langCode, translation]) => {
           const langId = languageMap.get(langCode);
@@ -1771,7 +1771,7 @@ export class MemStorage implements IStorage {
       .map(article => {
         const translations = this.articleTranslationsStore.get(article.id)?.get(language.id);
         const author = article.authorId ? this.usersStore.get(article.authorId) : undefined;
-        
+
         return {
           ...article,
           title: translations?.title || `Article ${article.id}`,
