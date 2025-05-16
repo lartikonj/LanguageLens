@@ -174,16 +174,18 @@ export default function HomePage() {
             ) : (
               categories?.slice(0, 3).map((category) => (
                 <ArticleCard
-                  key={category.id}
-                  id={category.id}
-                  slug={category.slug}
-                  title={category.name}
-                  description={category.description}
-                  category={{ name: "Featured", slug: "featured" }}
-                  imageUrl="/placeholder.jpg"
-                  views={1000}
-                  numLanguages={5}
-                />
+                    key={category.id}
+                    id={category.id}
+                    slug={category.slug}
+                    title={category.name}
+                    description={category.description || ""}
+                    category={{ name: "Featured", slug: "featured" }}
+                    imageUrl="/placeholder.jpg"
+                    views={1000}
+                    readTime={5}
+                    numLanguages={5}
+                    className=""
+                  />
               ))
             )}
           </div>
@@ -210,16 +212,18 @@ export default function HomePage() {
             ) : (
               categories?.slice(0, 3).map((category) => (
                 <ArticleCard
-                  key={category.id}
-                  id={category.id}
-                  slug={category.slug}
-                  title={category.name}
-                  description={category.description}
-                  category={{ name: "Popular", slug: "popular" }}
-                  imageUrl="/placeholder.jpg"
-                  views={2000}
-                  numLanguages={5}
-                />
+                    key={category.id}
+                    id={category.id}
+                    slug={category.slug}
+                    title={category.name}
+                    description={category.description || ""}
+                    category={{ name: "Popular", slug: "popular" }}
+                    imageUrl="/placeholder.jpg"
+                    views={2000}
+                    readTime={5}
+                    numLanguages={5}
+                    className=""
+                  />
               ))
             )}
           </div>
