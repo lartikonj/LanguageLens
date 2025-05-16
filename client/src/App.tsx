@@ -1,6 +1,8 @@
+
 import { Switch, Route } from "wouter";
 import { ProtectedRoute } from "./lib/protected-route";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from "@/components/ui/toaster";
 import NotFound from "@/pages/not-found";
 import HomePage from "@/pages/home-page";
 import ArticlePage from "@/pages/article-page";
@@ -13,7 +15,7 @@ import MainLayout from "@/components/layout/main-layout";
 
 function App() {
   return (
-    <TooltipProvider>
+    <>
       <MainLayout>
         <Switch>
           <Route path="/" component={HomePage} />
@@ -27,7 +29,8 @@ function App() {
           <Route component={NotFound} />
         </Switch>
       </MainLayout>
-    </TooltipProvider>
+      <Toaster />
+    </>
   );
 }
 

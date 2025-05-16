@@ -14,7 +14,13 @@ const navigation = [
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [location] = useLocation();
-  const auth = useAuth();
+  let auth;
+  try {
+    auth = useAuth();
+  } catch (error) {
+    console.error("Auth context not available:", error);
+    auth = { user: null };
+  }
 
   return (
     <header className="bg-background sticky top-0 z-50 w-full border-b">
