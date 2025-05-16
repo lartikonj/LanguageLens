@@ -21,8 +21,12 @@ mode = "sequential"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "npm install"
+args = "cd client && npm install"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd client && npm run dev & cd server && NODE_ENV=development tsx index.ts"
+args = "cd ../server && npm install"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd .. && concurrently \"cd client && npm run dev\" \"cd server && NODE_ENV=development tsx index.ts\""

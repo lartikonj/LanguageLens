@@ -13,8 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Menu, X, Home } from "lucide-react";
-import { createContext, useContext } from "react";
+import { Menu, X, Home as HomeIcon } from "lucide-react";
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -67,7 +66,7 @@ export default function Header() {
             <Button variant="ghost" asChild>
               <Link href="/">
                 <div className="flex items-center">
-                  <Home className="h-4 w-4 mr-2" />
+                  <HomeIcon className="h-4 w-4 mr-2" />
                   Home
                 </div>
               </Link>
