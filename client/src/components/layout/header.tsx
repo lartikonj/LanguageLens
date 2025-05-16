@@ -55,7 +55,7 @@ export default function Header() {
     <header className="bg-white shadow-sm dark:bg-gray-800 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
-          <div className="flex items-center">
+          <div className="flex items-center space-x-4">
             <Link href="/">
               <div className="flex-shrink-0 flex items-center cursor-pointer">
                 <span className="text-primary-600 dark:text-primary-400 text-3xl font-bold tracking-wider" style={{ fontFamily: 'Helvetica, Arial, sans-serif' }}>
@@ -63,6 +63,14 @@ export default function Header() {
                 </span>
               </div>
             </Link>
+            <Button variant="ghost" asChild>
+              <Link href="/">
+                <div className="flex items-center">
+                  <Home className="h-4 w-4 mr-2" />
+                  Home
+                </div>
+              </Link>
+            </Button>
             
             <nav className="hidden sm:ml-6 sm:flex sm:space-x-8" aria-label="Main navigation">
               {navigation.map((item) => (
@@ -107,6 +115,13 @@ export default function Header() {
                       <div className="cursor-pointer w-full">Profile</div>
                     </Link>
                   </DropdownMenuItem>
+                  {user.isAdmin && (
+                    <DropdownMenuItem asChild>
+                      <Link href="/admin">
+                        <div className="cursor-pointer w-full">Admin Panel</div>
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuItem 
                     className="cursor-pointer"
                     onClick={handleLogout}
