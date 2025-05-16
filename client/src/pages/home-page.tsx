@@ -8,36 +8,23 @@ import { Category } from "@/lib/types";
 import { Loader2, BookOpen, ChevronRight } from "lucide-react";
 
 export default function HomePage() {
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [authError, setAuthError] = useState(false);
+  const { data: categories, isLoading: categoriesLoading, error: categoriesError } = useQuery<Category[]>({
+    queryKey: ['categories'],
+    queryFn: () => fetch('/api/categories').then(res => res.json())
+  });
 
-  // Fetch categories
-  useEffect(() => {
-    // Get current language from localStorage or default to 'en'
-    const currentLang = localStorage.getItem("preferredLanguage") || 'en';
+  const { data: featuredArticles, isLoading: featuredLoading } = useQuery<Article[]>({
+    queryKey: ['featured-articles'],
+    queryFn: () => fetch('/api/articles/featured').then(res => res.json())
+  });
 
-    // Fetch categories with current language
-    setIsLoading(true);
-    fetch(`/api/categories?lang=${currentLang}`)
-      .then(res => {
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
-        return res.json();
-      })
-      .then(data => {
-        setCategories(data);
-        setIsLoading(false);
-        console.log("Categories loaded:", data);
-      })
-      .catch(err => {
-        console.error("Failed to load categories:", err);
-        setError("Failed to load categories");
-        setIsLoading(false);
-      });
-  }, []);
+  const { data: popularArticles, isLoading: popularLoading } = useQuery<Article[]>({
+    queryKey: ['popular-articles'],
+    queryFn: () => fetch('/api/articles/popular').then(res => res.json())
+  });
+
+  const isLoading = categoriesLoading || featuredLoading || popularLoading;
+  const error = categoriesError;
 
   // Scroll to top on mount
   useEffect(() => {
@@ -172,17 +159,20 @@ export default function HomePage() {
                 <Loader2 className="h-8 w-8 animate-spin text-primary-500" />
               </div>
             ) : (
-              categories?.slice(0, 3).map((category) => (
+              featuredArticles?.slice(0, 3).map((article) => (
                 <ArticleCard
-                  key={category.id}
-                  id={category.id}
-                  slug={category.slug}
-                  title={category.name}
-                  description={category.description || ""}
-                  category={{ name: "Featured", slug: "featured" }}
+                  key={article.id}
+                  id={article.id}
+                  slug={article.slug}
+                  title={article.title}
+                  description={article.content.substring(0, 150)}
+                  category={{ 
+                    name: article.subject.category.name,
+                    slug: article.subject.category.slug 
+                  }}
                   imageUrl="/placeholder.jpg"
                   views={1500}
-                  readTime={4}
+                  readTime={Math.ceil(article.content.length / 1000)}
                   numLanguages={5}
                 />
               ))
@@ -209,17 +199,20 @@ export default function HomePage() {
                 <Loader2 className="h-8 w-8 animate-spin text-primary-500" />
               </div>
             ) : (
-              categories?.slice(0, 3).map((category) => (
+              popularArticles?.slice(0, 3).map((article) => (
                 <ArticleCard
-                  key={category.id}
-                  id={category.id}
-                  slug={category.slug}
-                  title={category.name}
-                  description={category.description || ""}
-                  category={{ name: "Popular", slug: "popular" }}
+                  key={article.id}
+                  id={article.id}
+                  slug={article.slug}
+                  title={article.title}
+                  description={article.content.substring(0, 150)}
+                  category={{ 
+                    name: article.subject.category.name,
+                    slug: article.subject.category.slug 
+                  }}
                   imageUrl="/placeholder.jpg"
                   views={2000}
-                  readTime={5}
+                  readTime={Math.ceil(article.content.length / 1000)}
                   numLanguages={5}
                 />
               ))
