@@ -154,12 +154,75 @@ export class MemStorage implements IStorage {
     // Add categories
     const categories = [
       {
-        slug: 'modern-standard-arabic',
+        slug: 'language-learning',
         translations: {
-          en: { name: 'Modern Standard Arabic', description: 'Master formal Arabic used in media and literature' },
-          ar: { name: 'العربية الفصحى', description: 'إتقان اللغة العربية الرسمية المستخدمة في الإعلام والأدب' }
+          en: { name: 'Language Learning', description: 'Resources for vocabulary, grammar, phrases, pronunciation, and language comparison' },
+          ar: { name: 'تعلم اللغات', description: 'مصادر للمفردات والقواعد والعبارات والنطق ومقارنة اللغات' }
         }
       },
+      {
+        slug: 'culture-and-traditions',
+        translations: {
+          en: { name: 'Culture & Traditions', description: 'Explore food, holidays, clothing, etiquette, and religion' },
+          ar: { name: 'الثقافة والتقاليد', description: 'استكشف الطعام والعطلات والملابس وآداب السلوك والدين' }
+        }
+      },
+      {
+        slug: 'travel-and-places',
+        translations: {
+          en: { name: 'Travel & Places', description: 'City guides, travel phrases, transportation, local tips, and safety' },
+          ar: { name: 'السفر والأماكن', description: 'أدلة المدن وعبارات السفر والمواصلات والنصائح المحلية والسلامة' }
+        }
+      },
+      {
+        slug: 'entertainment-and-media',
+        translations: {
+          en: { name: 'Entertainment & Media', description: 'Movies, music, pop culture idioms, books, and celebrities' },
+          ar: { name: 'الترفيه والإعلام', description: 'الأفلام والموسيقى وتعابير الثقافة الشعبية والكتب والمشاهير' }
+        }
+      },
+      {
+        slug: 'history-and-heritage',
+        translations: {
+          en: { name: 'History & Heritage', description: 'Historical figures, key events, ancient civilizations, and language origins' },
+          ar: { name: 'التاريخ والتراث', description: 'الشخصيات التاريخية والأحداث الرئيسية والحضارات القديمة وأصول اللغة' }
+        }
+      },
+      {
+        slug: 'education-and-study',
+        translations: {
+          en: { name: 'Education & Study Tips', description: 'Study techniques, learning tools, flashcards, and memory methods' },
+          ar: { name: 'التعليم وطرق الدراسة', description: 'تقنيات الدراسة وأدوات التعلم والبطاقات التعليمية وطرق الذاكرة' }
+        }
+      },
+      {
+        slug: 'daily-life',
+        translations: {
+          en: { name: 'Daily Life & Conversations', description: 'Market, healthcare, weather, appointments, and family interactions' },
+          ar: { name: 'الحياة اليومية والمحادثات', description: 'السوق والرعاية الصحية والطقس والمواعيد والتفاعلات العائلية' }
+        }
+      },
+      {
+        slug: 'technology-and-innovation',
+        translations: {
+          en: { name: 'Technology & Innovation', description: 'AI & language, translation tools, learning platforms, and tech news' },
+          ar: { name: 'التكنولوجيا والابتكار', description: 'الذكاء الاصطناعي واللغة وأدوات الترجمة ومنصات التعلم وأخبار التكنولوجيا' }
+        }
+      },
+      {
+        slug: 'career-and-business',
+        translations: {
+          en: { name: 'Career & Business', description: 'CV writing, business vocabulary, interview tips, and work culture' },
+          ar: { name: 'المهنة والأعمال', description: 'كتابة السيرة الذاتية ومفردات الأعمال ونصائح المقابلات وثقافة العمل' }
+        }
+      },
+      {
+        slug: 'multilingual-fun',
+        translations: {
+          en: { name: 'Multilingual Fun & Games', description: 'Quizzes, challenges, word games, memes, and emoji phrases' },
+          ar: { name: 'المرح والألعاب متعددة اللغات', description: 'الاختبارات والتحديات وألعاب الكلمات والميمات وعبارات الرموز التعبيرية' }
+        }
+      }
       {
         slug: 'levantine-dialect',
         translations: {
