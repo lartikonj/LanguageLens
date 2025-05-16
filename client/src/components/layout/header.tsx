@@ -1,10 +1,10 @@
-
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Home, Menu, X, Search, ChevronDown } from "lucide-react";
+import { Home, Menu, X, Search, Globe, Sun, Moon } from "lucide-react";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
 import { 
   DropdownMenu,
@@ -17,6 +17,8 @@ import { Input } from "@/components/ui/input";
 const navigation = [
   { name: "About", href: "/about" },
   { name: "Categories", href: "/categories" },
+  { name: "Learn", href: "/learn" },
+  { name: "Practice", href: "/practice" }
 ];
 
 export function Header() {
@@ -42,7 +44,7 @@ export function Header() {
               </div>
             </Link>
           </Button>
-          
+
           <div className="hidden lg:flex relative w-64">
             <Input 
               type="search" 
@@ -69,7 +71,7 @@ export function Header() {
         <div className="hidden lg:flex lg:items-center lg:gap-x-6">
           <LanguageSwitcher />
           <ThemeToggle />
-          
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="sm">
