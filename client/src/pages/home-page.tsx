@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "wouter";
 import { Helmet } from "react-helmet";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import ArticleCard from "@/components/article-card";
 import { Button } from "@/components/ui/button";
 import { Category } from "@/lib/types";
 import { Loader2, BookOpen, ChevronRight } from "lucide-react";
