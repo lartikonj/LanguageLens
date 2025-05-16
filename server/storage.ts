@@ -222,7 +222,7 @@ export class MemStorage implements IStorage {
           en: { name: 'Multilingual Fun & Games', description: 'Quizzes, challenges, word games, memes, and emoji phrases' },
           ar: { name: 'المرح والألعاب متعددة اللغات', description: 'الاختبارات والتحديات وألعاب الكلمات والميمات وعبارات الرموز التعبيرية' }
         }
-      }
+      },
       {
         slug: 'levantine-dialect',
         translations: {
