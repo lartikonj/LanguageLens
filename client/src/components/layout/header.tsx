@@ -1,7 +1,8 @@
+
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Home as HomeIcon } from "lucide-react";
+import { Home, Menu, X } from "lucide-react";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { useAuth } from "@/hooks/use-auth";
@@ -13,7 +14,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Menu, X } from "lucide-react";
 
 const navigation = [
   { name: "Categories", href: "/categories" },
@@ -64,7 +64,7 @@ export default function Header() {
             <Button variant="ghost" asChild>
               <Link href="/">
                 <div className="flex items-center">
-                  <HomeIcon className="h-4 w-4 mr-2" />
+                  <Home className="h-4 w-4 mr-2" />
                   Home
                 </div>
               </Link>
