@@ -557,7 +557,7 @@ export class MemStorage implements IStorage {
 
   private addArticlesForSubject(subjectId: number, subjectSlug: string, languageMap: Map<string, number>): void {
     // Sample article content for each subject
-    const articlesData: { [key: string]: any } = {
+    const articlesData: { [key: string]: any[] } = {
       'business-meetings': [
         {
           slug: 'effective-presentations',
