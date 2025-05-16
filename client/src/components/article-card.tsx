@@ -1,11 +1,10 @@
-import { Link } from "wouter";
-import { useTranslation } from "react-i18next";
-import { Clock, Eye } from "lucide-react";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { useLanguage } from "@/hooks/use-language";
 
-type ArticleCardProps = {
+import { Link } from "wouter";
+import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Clock, Eye, Languages } from "lucide-react";
+
+interface ArticleCardProps {
   id: number;
   slug: string;
   title: string;
@@ -19,7 +18,7 @@ type ArticleCardProps = {
   readTime?: number;
   numLanguages: number;
   className?: string;
-};
+}
 
 export default function ArticleCard({
   slug,
@@ -32,15 +31,9 @@ export default function ArticleCard({
   numLanguages,
   className = "",
 }: ArticleCardProps) {
-  const { t } = useTranslation();
-  const { isRtl } = useLanguage();
-
   return (
-    <Card 
-      className={`overflow-hidden hover:shadow-md transition-shadow duration-300 ${className}`}
-      dir={isRtl ? "rtl" : "ltr"}
-    >
-      <Link href={`/article/${slug}`}>
+    <Card className={`overflow-hidden hover:shadow-md transition-shadow ${className}`}>
+      <Link href={`/articles/${slug}`}>
         <div className="aspect-[16/9] overflow-hidden">
           <img
             src={imageUrl}
@@ -50,38 +43,39 @@ export default function ArticleCard({
         </div>
       </Link>
       
-      <CardContent className="p-4">
-        <div className="flex items-center text-xs text-gray-500 dark:text-gray-400 mb-2 space-x-2 rtl:space-x-reverse">
-          <Link href={`/category/${category.slug}`}>
-            <Badge variant="outline" className="hover:bg-secondary-50">
-              {category.name}
-            </Badge>
-          </Link>
-          <div className="flex items-center">
-            <Clock className="h-3 w-3 mr-1 rtl:ml-1 rtl:mr-0" />
-            <span>{readTime} min read</span>
-          </div>
-        </div>
-        
-        <Link href={`/article/${slug}`}>
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+      <CardHeader className="space-y-2">
+        <Link href={`/category/${category.slug}`}>
+          <Badge variant="outline" className="inline-block hover:bg-secondary">
+            {category.name}
+          </Badge>
+        </Link>
+        <Link href={`/articles/${slug}`}>
+          <h3 className="text-lg font-semibold hover:text-primary transition-colors line-clamp-2">
             {title}
           </h3>
         </Link>
-        
-        <p className="text-gray-600 dark:text-gray-300 text-sm line-clamp-3">
+      </CardHeader>
+      
+      <CardContent>
+        <p className="text-muted-foreground text-sm line-clamp-3">
           {description}
         </p>
       </CardContent>
       
-      <CardFooter className="px-4 py-3 bg-gray-50 dark:bg-gray-800 text-sm flex justify-between items-center">
-        <span className="text-primary-600 dark:text-primary-400">
-          {t("article.availableIn")} {numLanguages} {t("article.languages")}
-        </span>
-        
-        <div className="flex items-center text-gray-500 dark:text-gray-400">
-          <Eye className="h-4 w-4 mr-1 rtl:ml-1 rtl:mr-0" />
-          <span>{views}</span>
+      <CardFooter className="justify-between text-sm text-muted-foreground">
+        <div className="flex items-center space-x-2">
+          <Clock className="h-4 w-4" />
+          <span>{readTime} min read</span>
+        </div>
+        <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-1">
+            <Languages className="h-4 w-4" />
+            <span>{numLanguages}</span>
+          </div>
+          <div className="flex items-center space-x-1">
+            <Eye className="h-4 w-4" />
+            <span>{views}</span>
+          </div>
         </div>
       </CardFooter>
     </Card>
