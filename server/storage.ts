@@ -85,7 +85,31 @@ export interface IStorage {
   sessionStore: session.SessionStore;
 }
 
+export interface Article {
+  id: number;
+  slug: string;
+  authorId: number;
+  subjectId: number;
+  status?: 'pending' | 'approved' | 'rejected';
+  publishedAt: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface Message {
+  id: number;
+  userId: number;
+  content: string;
+  createdAt: Date;
+  user: {
+    id: number;
+    username: string;
+  };
+}
+
 export class MemStorage implements IStorage {
+  private currentMessageId: number = 1;
+  private messagesStore: Map<number, Message>;
   private usersStore: Map<number, User>;
   private languagesStore: Map<number, Language>;
   private categoriesStore: Map<number, Category>;
@@ -111,6 +135,7 @@ export class MemStorage implements IStorage {
 
   constructor() {
     this.usersStore = new Map();
+    this.messagesStore = new Map();
     this.languagesStore = new Map();
     this.categoriesStore = new Map();
     this.categoryTranslationsStore = new Map();
@@ -1978,6 +2003,41 @@ export class MemStorage implements IStorage {
     return Array.from(this.savedArticlesStore.values()).some(
       saved => saved.articleId === articleId && saved.userId === userId
     );
+  }
+
+  async getPendingArticles(): Promise<ArticleWithTranslation[]> {
+    const pendingArticles = Array.from(this.articlesStore.values())
+      .filter(article => article.status === 'pending');
+    
+    const result: ArticleWithTranslation[] = [];
+    for (const article of pendingArticles) {
+      const articleWithTranslation = await this.getArticleBySlug(article.slug, 'en');
+      if (articleWithTranslation) {
+        result.push(articleWithTranslation);
+      }
+    }
+    return result;
+  }
+
+  async approveArticle(articleId: number): Promise<void> {
+    const article = this.articlesStore.get(articleId);
+    if (article) {
+      article.status = 'approved';
+      article.publishedAt = new Date();
+      this.articlesStore.set(articleId, article);
+    }
+  }
+
+  async rejectArticle(articleId: number): Promise<void> {
+    const article = this.articlesStore.get(articleId);
+    if (article) {
+      article.status = 'rejected';
+      this.articlesStore.set(articleId, article);
+    }
+  }
+
+  async getAdminMessages(): Promise<Message[]> {
+    return Array.from(this.messagesStore.values());
   }
 
   async getSavedArticles(userId: number, languageCode: string): Promise<ArticleWithTranslation[]> {

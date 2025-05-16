@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Home } from "lucide-react";
 import { createContext, useContext } from "react";
 
 const navigation = [
