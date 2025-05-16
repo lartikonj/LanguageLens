@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { HomeIcon, Menu as MenuIcon, X } from "lucide-react";
+import { Home as HomeIcon, Menu as MenuIcon, X } from "lucide-react";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { useAuth } from "@/hooks/use-auth";
@@ -20,20 +20,10 @@ const navigation = [
   { name: "About", href: "/about" },
 ];
 
-export default function Header() {
+export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [location] = useLocation();
-
-  let auth = {
-    user: null,
-    logoutMutation: { mutate: () => {}, isPending: false }
-  };
-
-  try {
-    auth = useAuth();
-  } catch (e) {
-    console.log("Auth context not available yet");
-  }
+  const auth = useAuth();
 
   return (
     <header className="bg-background sticky top-0 z-50 w-full border-b">
@@ -51,10 +41,8 @@ export default function Header() {
         <div className="flex lg:hidden">
           <Button
             variant="ghost"
-            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
-            <span className="sr-only">Open main menu</span>
             {mobileMenuOpen ? (
               <X className="block h-6 w-6" aria-hidden="true" />
             ) : (

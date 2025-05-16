@@ -25,12 +25,4 @@ args = "npm install"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd client && npm install"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "cd /home/runner/workspace/server && npm install"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "concurrently \"cd client && npm run dev\" \"cd server && NODE_ENV=development tsx index.ts\""
+args = "npm run dev"
