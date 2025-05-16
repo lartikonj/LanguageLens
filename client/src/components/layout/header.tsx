@@ -58,7 +58,9 @@ export default function Header() {
           <div className="flex items-center">
             <Link href="/">
               <div className="flex-shrink-0 flex items-center cursor-pointer">
-                <span className="text-primary-600 dark:text-primary-400 text-2xl font-bold">Lingua<span className="text-accent-500">Content</span></span>
+                <span className="text-primary-600 dark:text-primary-400 text-3xl font-bold tracking-wider" style={{ fontFamily: 'Helvetica, Arial, sans-serif' }}>
+                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-accent-500">Kalima</span>
+                </span>
               </div>
             </Link>
             

@@ -62,11 +62,11 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-5xl md:text-6xl">
-              <span className="block">Learn Languages Through</span>
-              <span className="block text-primary-600 dark:text-primary-500">Content You Love</span>
+              <span className="block">Master Arabic Through</span>
+              <span className="block text-primary-600 dark:text-primary-500">Authentic Content</span>
             </h1>
             <p className="mt-6 max-w-2xl mx-auto text-xl text-gray-500 dark:text-gray-300">
-              Immerse yourself in articles, stories, and content in multiple languages. Switch between languages or view them side by side to naturally reinforce your understanding.
+              Immerse yourself in the rich world of Arabic language and culture. Learn diverse dialects, classical texts, and modern expressions through carefully curated content.
             </p>
             <div className="mt-10 flex justify-center">
               <Link href="/categories">

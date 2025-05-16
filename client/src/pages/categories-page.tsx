@@ -33,7 +33,7 @@ export default function CategoriesPage() {
   return (
     <>
       <Helmet>
-        <title>Categories | LinguaContent</title>
+        <title>Categories | Kalima</title>
         <meta name="description" content="Browse all content categories on LinguaContent. Find articles, stories and more in English, Arabic, French, Spanish, and German." />
         <link rel="canonical" href="https://linguacontent.com/categories" />
       </Helmet>

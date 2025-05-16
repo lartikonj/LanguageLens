@@ -154,15 +154,75 @@ export class MemStorage implements IStorage {
     // Add categories
     const categories = [
       {
-        slug: 'daily-conversations',
+        slug: 'modern-standard-arabic',
         translations: {
-          en: { name: 'Daily Conversations', description: 'Learn everyday phrases and expressions' },
-          ar: { name: 'المحادثات اليومية', description: 'تعلم العبارات والتعبيرات اليومية' },
-          fr: { name: 'Conversations Quotidiennes', description: 'Apprenez des phrases et expressions quotidiennes' },
-          es: { name: 'Conversaciones Diarias', description: 'Aprende frases y expresiones cotidianas' },
-          de: { name: 'Tägliche Gespräche', description: 'Lernen Sie alltägliche Redewendungen und Ausdrücke' },
+          en: { name: 'Modern Standard Arabic', description: 'Master formal Arabic used in media and literature' },
+          ar: { name: 'العربية الفصحى', description: 'إتقان اللغة العربية الرسمية المستخدمة في الإعلام والأدب' }
         }
       },
+      {
+        slug: 'levantine-dialect',
+        translations: {
+          en: { name: 'Levantine Arabic', description: 'Learn the dialect of Syria, Lebanon, Palestine, and Jordan' },
+          ar: { name: 'اللهجة الشامية', description: 'تعلم لهجة سوريا ولبنان وفلسطين والأردن' }
+        }
+      },
+      {
+        slug: 'egyptian-dialect',
+        translations: {
+          en: { name: 'Egyptian Arabic', description: 'Master the most widely understood Arabic dialect' },
+          ar: { name: 'اللهجة المصرية', description: 'إتقان اللهجة العربية الأكثر فهماً' }
+        }
+      },
+      {
+        slug: 'gulf-dialect',
+        translations: {
+          en: { name: 'Gulf Arabic', description: 'Learn the dialect of the Arabian Peninsula' },
+          ar: { name: 'اللهجة الخليجية', description: 'تعلم لهجة شبه الجزيرة العربية' }
+        }
+      },
+      {
+        slug: 'business-arabic',
+        translations: {
+          en: { name: 'Business Arabic', description: 'Professional Arabic for work and commerce' },
+          ar: { name: 'العربية للأعمال', description: 'العربية المهنية للعمل والتجارة' }
+        }
+      },
+      {
+        slug: 'quranic-arabic',
+        translations: {
+          en: { name: 'Quranic Arabic', description: 'Classical Arabic for understanding religious texts' },
+          ar: { name: 'العربية القرآنية', description: 'العربية الكلاسيكية لفهم النصوص الدينية' }
+        }
+      },
+      {
+        slug: 'media-arabic',
+        translations: {
+          en: { name: 'Media Arabic', description: 'Arabic used in news and journalism' },
+          ar: { name: 'عربية الإعلام', description: 'العربية المستخدمة في الأخبار والصحافة' }
+        }
+      },
+      {
+        slug: 'literature-poetry',
+        translations: {
+          en: { name: 'Literature & Poetry', description: 'Explore Arabic literature and poetic traditions' },
+          ar: { name: 'الأدب والشعر', description: 'اكتشف الأدب العربي والتقاليد الشعرية' }
+        }
+      },
+      {
+        slug: 'cultural-expressions',
+        translations: {
+          en: { name: 'Cultural Expressions', description: 'Idioms, proverbs, and cultural wisdom' },
+          ar: { name: 'التعابير الثقافية', description: 'الأمثال والحكم والتعابير الثقافية' }
+        }
+      },
+      {
+        slug: 'arabic-calligraphy',
+        translations: {
+          en: { name: 'Arabic Calligraphy', description: 'Learn about Arabic script and its artistic forms' },
+          ar: { name: 'الخط العربي', description: 'تعلم عن الكتابة العربية وأشكالها الفنية' }
+        }
+      }
       {
         slug: 'travel-guide',
         translations: {
