@@ -154,16 +154,16 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Featured Articles */}
+      {/* Categories */}
       <section className="py-12 bg-gray-50 dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center mb-8">
+          <div className="mb-8">
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-              Featured Articles
+              Browse Categories
             </h2>
-            <Link href="/featured">
-              <Button variant="outline">View All</Button>
-            </Link>
+            <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">
+              Explore our comprehensive collection of Arabic language resources
+            </p>
           </div>
 
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -172,20 +172,26 @@ export default function HomePage() {
                 <Loader2 className="h-8 w-8 animate-spin text-primary-500" />
               </div>
             ) : (
-              categories?.slice(0, 3).map((category) => (
-                <ArticleCard
-                    key={category.id}
-                    id={category.id}
-                    slug={category.slug}
-                    title={category.name}
-                    description={category.description || ""}
-                    category={{ name: "Featured", slug: "featured" }}
-                    imageUrl="/placeholder.jpg"
-                    views={1000}
-                    readTime={5}
-                    numLanguages={5}
-                    className=""
-                  />
+              categories?.map((category) => (
+                <Link key={category.id} href={`/categories/${category.slug}`}>
+                  <Card className="hover:shadow-md transition-shadow h-full">
+                    <CardHeader>
+                      <CardTitle>{category.name}</CardTitle>
+                      <CardDescription>{category.description}</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                        {category.subcategories?.length || 0} Subcategories
+                      </p>
+                    </CardContent>
+                    <CardFooter>
+                      <Button variant="outline" className="w-full">
+                        Explore Category
+                        <ChevronRight className="ml-2 h-4 w-4" />
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                </Link>
               ))
             )}
           </div>

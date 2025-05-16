@@ -169,10 +169,34 @@ export default function CategoryPage() {
             </div>
           </div>
           
-          {/* Category Content */}
-<CategoryContent category={slug} />
-
-{/* Articles Grid */}
+          {/* Subcategories Grid */}
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {isLoading ? (
+              <div className="col-span-3 flex justify-center py-10">
+                <Loader2 className="h-8 w-8 animate-spin text-primary-500" />
+              </div>
+            ) : categoryData?.subcategories?.map((subcategory) => (
+              <Link key={subcategory.id} href={`/categories/${slug}/${subcategory.slug}`}>
+                <Card className="hover:shadow-md transition-shadow h-full">
+                  <CardHeader>
+                    <CardTitle>{subcategory.name}</CardTitle>
+                    <CardDescription>{subcategory.description}</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      {subcategory.articles?.length || 0} Articles
+                    </p>
+                  </CardContent>
+                  <CardFooter>
+                    <Button variant="outline" className="w-full">
+                      View Articles
+                      <ChevronRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </CardFooter>
+                </Card>
+              </Link>
+            ))}
+          </div>
           {isLoading ? (
             <div className="flex justify-center py-12">
               <Loader2 className="h-12 w-12 animate-spin text-primary-500" />

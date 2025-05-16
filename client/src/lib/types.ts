@@ -9,9 +9,19 @@ export interface Language {
 export interface Category {
   id: number;
   slug: string;
-  createdAt: string;
   name: string;
   description?: string;
+  createdAt: string;
+  subcategories: Subcategory[];
+}
+
+export interface Subcategory {
+  id: number;
+  slug: string;
+  name: string;
+  description?: string;
+  categoryId: number;
+  articles: Article[];
 }
 
 export interface Subject {
