@@ -10,3 +10,19 @@ run = ["sh", "-c", "npm run dev"]
 [[ports]]
 localPort = 5000
 externalPort = 80
+
+[workflows]
+runButton = "Dev Server"
+
+[[workflows.workflow]]
+name = "Dev Server"
+author = 42702418
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm install"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "NODE_ENV=development tsx server/index.ts"

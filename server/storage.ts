@@ -48,33 +48,33 @@ export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
-  
+
   // Languages
   getLanguages(): Promise<Language[]>;
   getLanguageByCode(code: string): Promise<Language | undefined>;
-  
+
   // Categories
   getCategoriesWithTranslations(languageCode: string): Promise<CategoryWithTranslation[]>;
   getCategoryBySlug(slug: string, languageCode: string): Promise<CategoryWithTranslation | undefined>;
-  
+
   // Subjects
   getSubjectsByCategorySlug(categorySlug: string, languageCode: string): Promise<SubjectWithTranslation[]>;
   getSubjectBySlug(slug: string, languageCode: string): Promise<SubjectWithTranslation | undefined>;
-  
+
   // Articles
   getArticlesBySubjectSlug(subjectSlug: string, languageCode: string): Promise<ArticleWithTranslation[]>;
   getArticleBySlug(slug: string, languageCode: string): Promise<ArticleWithTranslation | undefined>;
   getArticleTranslations(slug: string): Promise<ArticleTranslationWithLanguage[]>;
-  
+
   // Comments
   getCommentsByArticleSlug(articleSlug: string): Promise<CommentWithUser[]>;
   createComment(comment: { articleId: number; userId: number; content: string; parentId?: number }): Promise<Comment>;
-  
+
   // Likes
   likeArticle(articleId: number, userId: number): Promise<Like>;
   unlikeArticle(articleId: number, userId: number): Promise<void>;
   isArticleLiked(articleId: number, userId: number): Promise<boolean>;
-  
+
   // Saved Articles
   saveArticle(articleId: number, userId: number): Promise<SavedArticle>;
   unsaveArticle(articleId: number, userId: number): Promise<void>;
@@ -222,7 +222,7 @@ export class MemStorage implements IStorage {
           en: { name: 'Arabic Calligraphy', description: 'Learn about Arabic script and its artistic forms' },
           ar: { name: 'الخط العربي', description: 'تعلم عن الكتابة العربية وأشكالها الفنية' }
         }
-      }
+      },
       {
         slug: 'travel-guide',
         translations: {
@@ -594,7 +594,7 @@ export class MemStorage implements IStorage {
                 <li><strong>Ouverture:</strong> "J'espère que ce message vous trouve bien.", "Je vous écris concernant..."</li>
                 <li><strong>Corps:</strong> Gardez les paragraphes courts et concentrés sur un seul sujet chacun</li>
                 <li><strong>Conclusion:</strong> "Merci pour votre considération.", "J'attends votre réponse avec intérêt."</li>
-                <li><strong>Signature:</strong> "Cordialement,", "Sincèrement,", "Bien à vous,"</li>
+                                <li><strong>Signature:</strong> "Cordialement,", "Sincèrement,", "Bien à vous,"</li>
               </ul>
               <p>Relisez toujours vos emails avant de les envoyer et considérez votre ton. La communication écrite manque d'intonation vocale, alors soyez prudent avec l'humour ou le sarcasme qui pourraient être mal interprétés.</p>`,
               notes: 'N\'oubliez pas d\'adapter votre style en fonction de votre relation avec le destinataire.'
@@ -1055,7 +1055,7 @@ export class MemStorage implements IStorage {
                 <li><strong>Carte d'embarquement :</strong> Document qui vous permet de monter à bord de l'avion</li>
                 <li><strong>Porte :</strong> Où vous embarquez pour votre vol</li>
                 <li><strong>Tableau des départs/arrivées :</strong> Écrans affichant les informations de vol</li>
-                <li><strong>Contrôle de sécurité :</strong> Où vos bagages sont scannés</li>
+                <li><strong>Contrôle de sécurité :</strong> Où vos bagagessont scannés</li>
                 <li><strong>Douane :</strong> Où vos documents et bagages peuvent être vérifiés à l'entrée d'un pays</li>
                 <li><strong>Récupération des bagages :</strong> Où vous récupérez vos bagages après un vol</li>
               </ul>
@@ -1448,7 +1448,7 @@ export class MemStorage implements IStorage {
                 <li><strong>Chinesisches Neujahr:</strong> Der wichtigste Feiertag in der chinesischen Kultur, der den Beginn des Mondneujahrs mit Familientreffen, besonderen Mahlzeiten und roten Dekorationen für Glück markiert.</li>
                 <li><strong>Diwali (Indien):</strong> Das Lichterfest, das von Hindus, Jains und Sikhs gefeiert wird und mit Lampen, Feuerwerk und Süßigkeiten den Sieg des Lichts über die Dunkelheit symbolisiert.</li>
                 <li><strong>Ramadan & Eid al-Fitr (Islamisch):</strong> Ein Monat des Fastens, gefolgt von einem Festmahl, das spirituelle Reflexion und Gemeinschaft betont.</li>
-                <li><strong>Karneval (Brasilien, Venedig, New Orleans):</strong> Feierlichkeiten vor der Fastenzeit mit Paraden, Musik, Tanz und aufwendigen Kostümen.</li>
+                <li><strong>Karneval (Brasilien, Venedig, New Orleans):</strong> Festivitäten vor der Fastenzeit mit Paraden, Musik, Tanz und aufwendigen Kostümen.</li>
                 <li><strong>Thanksgiving (USA, Kanada):</strong> Ein Erntefest, das mit Familientreffen und traditionellen Speisen Dankbarkeit feiert.</li>
               </ul>
               <p>Wenn Sie während eines wichtigen lokalen Feiertags reisen, recherchieren Sie im Voraus, da dies Auswirkungen auf Geschäftszeiten, Transport und Unterkunftsverfügbarkeit haben kann. Es kann jedoch auch einzigartige kulturelle Erfahrungen bieten, die zu anderen Zeiten nicht verfügbar sind.</p>`,
@@ -1499,8 +1499,7 @@ export class MemStorage implements IStorage {
               <ul>
                 <li><strong>Japon :</strong> Enlever ses chaussures avant d'entrer dans les maisons, éviter de planter les baguettes verticalement dans le riz, s'incliner en saluant.</li>
                 <li><strong>Moyen-Orient :</strong> S'habiller modestement, utiliser la main droite pour manger et donner des objets, demander la permission avant de prendre des photos de personnes.</li>
-                <li><strong>Inde :</strong> Enlever ses chaussures avant d'entrer dans les temples, éviter les manifestations publiques d'affection, utiliser sa main droite pour manger et donner/recevoir des objets.</li>
-                <li><strong>Amérique latine :</strong> Les salutations sont importantes et incluent souvent un contact physique, la ponctualité est moins stricte, les relations sont valorisées plus que les horaires.</li>
+                <li><strong>Inde :</strong> Enlever ses chaussures avant d'entrer dans les temples, éviter les manifestations publiques d'affection, utiliser sa main droite pour manger et donner/recevoir des objets.                <li><strong>Amérique latine :</strong> Les salutations sont importantes et incluent souvent un contact physique, la ponctualité est moins stricte, les relations sont valorisées plus que les horaires.</li>
                 <li><strong>Europe du Nord :</strong> La ponctualité est très valorisée, l'espace personnel est respecté, style de communication plus calme et plus réservé.</li>
               </ul>
               <p>N'oubliez pas que ce sont des généralisations et que les comportements individuels varient. Le plus important est d'aborder les nouvelles situations culturelles avec respect, humilité et volonté d'apprendre.</p>`,
@@ -1516,7 +1515,7 @@ export class MemStorage implements IStorage {
                 <li><strong>Oriente Medio:</strong> Vestir modestamente, usar la mano derecha para comer y dar objetos, pedir permiso antes de tomar fotos de personas.</li>
                 <li><strong>India:</strong> Quitarse los zapatos antes de entrar en los templos, evitar muestras públicas de afecto, usar la mano derecha para comer y dar/recibir objetos.</li>
                 <li><strong>América Latina:</strong> Los saludos son importantes y a menudo incluyen contacto físico, la puntualidad es menos estricta, las relaciones son valoradas por encima de los horarios.</li>
-                <li><strong>Europa del Norte:</strong> La puntualidad es muy valorada, se respeta el espacio personal, estilo de comunicación más tranquilo y reservado.</li>
+                <li><strong>Norte de Europa:</strong> La puntualidad es muy valorada, se respeta el espacio personal, estilo de comunicación más tranquilo y reservado.</li>
               </ul>
               <p>Recuerda que estas son generalizaciones y los comportamientos individuales varían. Lo más importante es abordar nuevas situaciones culturales con respeto, humildad y disposición para aprender.</p>`,
               notes: 'Investiga la etiqueta específica para los países que planeas visitar para mostrar respeto por las costumbres locales.'
