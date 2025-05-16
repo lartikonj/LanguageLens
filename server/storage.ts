@@ -48,33 +48,33 @@ export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
-  
+
   // Languages
   getLanguages(): Promise<Language[]>;
   getLanguageByCode(code: string): Promise<Language | undefined>;
-  
+
   // Categories
   getCategoriesWithTranslations(languageCode: string): Promise<CategoryWithTranslation[]>;
   getCategoryBySlug(slug: string, languageCode: string): Promise<CategoryWithTranslation | undefined>;
-  
+
   // Subjects
   getSubjectsByCategorySlug(categorySlug: string, languageCode: string): Promise<SubjectWithTranslation[]>;
   getSubjectBySlug(slug: string, languageCode: string): Promise<SubjectWithTranslation | undefined>;
-  
+
   // Articles
   getArticlesBySubjectSlug(subjectSlug: string, languageCode: string): Promise<ArticleWithTranslation[]>;
   getArticleBySlug(slug: string, languageCode: string): Promise<ArticleWithTranslation | undefined>;
   getArticleTranslations(slug: string): Promise<ArticleTranslationWithLanguage[]>;
-  
+
   // Comments
   getCommentsByArticleSlug(articleSlug: string): Promise<CommentWithUser[]>;
   createComment(comment: { articleId: number; userId: number; content: string; parentId?: number }): Promise<Comment>;
-  
+
   // Likes
   likeArticle(articleId: number, userId: number): Promise<Like>;
   unlikeArticle(articleId: number, userId: number): Promise<void>;
   isArticleLiked(articleId: number, userId: number): Promise<boolean>;
-  
+
   // Saved Articles
   saveArticle(articleId: number, userId: number): Promise<SavedArticle>;
   unsaveArticle(articleId: number, userId: number): Promise<void>;
@@ -85,7 +85,31 @@ export interface IStorage {
   sessionStore: session.SessionStore;
 }
 
+export interface Article {
+  id: number;
+  slug: string;
+  authorId: number;
+  subjectId: number;
+  status?: 'pending' | 'approved' | 'rejected';
+  publishedAt: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface Message {
+  id: number;
+  userId: number;
+  content: string;
+  createdAt: Date;
+  user: {
+    id: number;
+    username: string;
+  };
+}
+
 export class MemStorage implements IStorage {
+  private currentMessageId: number = 1;
+  private messagesStore: Map<number, Message>;
   private usersStore: Map<number, User>;
   private languagesStore: Map<number, Language>;
   private categoriesStore: Map<number, Category>;
@@ -97,9 +121,9 @@ export class MemStorage implements IStorage {
   private commentsStore: Map<number, Comment>;
   private likesStore: Map<number, Like>;
   private savedArticlesStore: Map<number, SavedArticle>;
-  
+
   sessionStore: session.SessionStore;
-  
+
   private currentUserId: number = 1;
   private currentLanguageId: number = 1;
   private currentCategoryId: number = 1;
@@ -111,6 +135,7 @@ export class MemStorage implements IStorage {
 
   constructor() {
     this.usersStore = new Map();
+    this.messagesStore = new Map();
     this.languagesStore = new Map();
     this.categoriesStore = new Map();
     this.categoryTranslationsStore = new Map();
@@ -121,11 +146,11 @@ export class MemStorage implements IStorage {
     this.commentsStore = new Map();
     this.likesStore = new Map();
     this.savedArticlesStore = new Map();
-    
+
     this.sessionStore = new MemoryStore({
       checkPeriod: 86400000, // prune expired entries every 24h
     });
-    
+
     // Initialize with default data
     this.initializeData();
   }
@@ -139,9 +164,9 @@ export class MemStorage implements IStorage {
       { code: 'es', name: 'Spanish', nativeName: 'Español', rtl: false },
       { code: 'de', name: 'German', nativeName: 'Deutsch', rtl: false },
     ];
-    
+
     const languageMap = new Map<string, number>();
-    
+
     languages.forEach(lang => {
       const id = this.currentLanguageId++;
       this.languagesStore.set(id, {
@@ -154,13 +179,136 @@ export class MemStorage implements IStorage {
     // Add categories
     const categories = [
       {
-        slug: 'daily-conversations',
+        slug: 'language-learning',
         translations: {
-          en: { name: 'Daily Conversations', description: 'Learn everyday phrases and expressions' },
-          ar: { name: 'المحادثات اليومية', description: 'تعلم العبارات والتعبيرات اليومية' },
-          fr: { name: 'Conversations Quotidiennes', description: 'Apprenez des phrases et expressions quotidiennes' },
-          es: { name: 'Conversaciones Diarias', description: 'Aprende frases y expresiones cotidianas' },
-          de: { name: 'Tägliche Gespräche', description: 'Lernen Sie alltägliche Redewendungen und Ausdrücke' },
+          en: { name: 'Language Learning', description: 'Resources for vocabulary, grammar, phrases, pronunciation, and language comparison' },
+          ar: { name: 'تعلم اللغات', description: 'مصادر للمفردات والقواعد والعبارات والنطق ومقارنة اللغات' }
+        }
+      },
+      {
+        slug: 'culture-and-traditions',
+        translations: {
+          en: { name: 'Culture & Traditions', description: 'Explore food, holidays, clothing, etiquette, and religion' },
+          ar: { name: 'الثقافة والتقاليد', description: 'استكشف الطعام والعطلات والملابس وآداب السلوك والدين' }
+        }
+      },
+      {
+        slug: 'travel-and-places',
+        translations: {
+          en: { name: 'Travel & Places', description: 'City guides, travel phrases, transportation, local tips, and safety' },
+          ar: { name: 'السفر والأماكن', description: 'أدلة المدن وعبارات السفر والمواصلات والنصائح المحلية والسلامة' }
+        }
+      },
+      {
+        slug: 'entertainment-and-media',
+        translations: {
+          en: { name: 'Entertainment & Media', description: 'Movies, music, pop culture idioms, books, and celebrities' },
+          ar: { name: 'الترفيه والإعلام', description: 'الأفلام والموسيقى وتعابير الثقافة الشعبية والكتب والمشاهير' }
+        }
+      },
+      {
+        slug: 'history-and-heritage',
+        translations: {
+          en: { name: 'History & Heritage', description: 'Historical figures, key events, ancient civilizations, and language origins' },
+          ar: { name: 'التاريخ والتراث', description: 'الشخصيات التاريخية والأحداث الرئيسية والحضارات القديمة وأصول اللغة' }
+        }
+      },
+      {
+        slug: 'education-and-study',
+        translations: {
+          en: { name: 'Education & Study Tips', description: 'Study techniques, learning tools, flashcards, and memory methods' },
+          ar: { name: 'التعليم وطرق الدراسة', description: 'تقنيات الدراسة وأدوات التعلم والبطاقات التعليمية وطرق الذاكرة' }
+        }
+      },
+      {
+        slug: 'daily-life',
+        translations: {
+          en: { name: 'Daily Life & Conversations', description: 'Market, healthcare, weather, appointments, and family interactions' },
+          ar: { name: 'الحياة اليومية والمحادثات', description: 'السوق والرعاية الصحية والطقس والمواعيد والتفاعلات العائلية' }
+        }
+      },
+      {
+        slug: 'technology-and-innovation',
+        translations: {
+          en: { name: 'Technology & Innovation', description: 'AI & language, translation tools, learning platforms, and tech news' },
+          ar: { name: 'التكنولوجيا والابتكار', description: 'الذكاء الاصطناعي واللغة وأدوات الترجمة ومنصات التعلم وأخبار التكنولوجيا' }
+        }
+      },
+      {
+        slug: 'career-and-business',
+        translations: {
+          en: { name: 'Career & Business', description: 'CV writing, business vocabulary, interview tips, and work culture' },
+          ar: { name: 'المهنة والأعمال', description: 'كتابة السيرة الذاتية ومفردات الأعمال ونصائح المقابلات وثقافة العمل' }
+        }
+      },
+      {
+        slug: 'multilingual-fun',
+        translations: {
+          en: { name: 'Multilingual Fun & Games', description: 'Quizzes, challenges, word games, memes, and emoji phrases' },
+          ar: { name: 'المرح والألعاب متعددة اللغات', description: 'الاختبارات والتحديات وألعاب الكلمات والميمات وعبارات الرموز التعبيرية' }
+        }
+      },
+      {
+        slug: 'levantine-dialect',
+        translations: {
+          en: { name: 'Levantine Arabic', description: 'Learn the dialect of Syria, Lebanon, Palestine, and Jordan' },
+          ar: { name: 'اللهجة الشامية', description: 'تعلم لهجة سوريا ولبنان وفلسطين والأردن' }
+        }
+      },
+      {
+        slug: 'egyptian-dialect',
+        translations: {
+          en: { name: 'Egyptian Arabic', description: 'Master the most widely understood Arabic dialect' },
+          ar: { name: 'اللهجة المصرية', description: 'إتقان اللهجة العربية الأكثر فهماً' }
+        }
+      },
+      {
+        slug: 'gulf-dialect',
+        translations: {
+          en: { name: 'Gulf Arabic', description: 'Learn the dialect of the Arabian Peninsula' },
+          ar: { name: 'اللهجة الخليجية', description: 'تعلم لهجة شبه الجزيرة العربية' }
+        }
+      },
+      {
+        slug: 'business-arabic',
+        translations: {
+          en: { name: 'Business Arabic', description: 'Professional Arabic for work and commerce' },
+          ar: { name: 'العربية للأعمال', description: 'العربية المهنية للعمل والتجارة' }
+        }
+      },
+      {
+        slug: 'quranic-arabic',
+        translations: {
+          en: { name: 'Quranic Arabic', description: 'Classical Arabic for understanding religious texts' },
+          ar: { name: 'العربية القرآنية', description: 'العربية الكلاسيكية لفهم النصوص الدينية' }
+        }
+      },
+      {
+        slug: 'media-arabic',
+        translations: {
+          en: { name: 'Media Arabic', description: 'Arabic used in news and journalism' },
+          ar: { name: 'عربية الإعلام', description: 'العربية المستخدمة في الأخبار والصحافة' }
+        }
+      },
+      {
+        slug: 'literature-poetry',
+        translations: {
+          en: { name: 'Literature & Poetry', description: 'Explore Arabic literature and poetic traditions' },
+          ar: { name: 'الأدب والشعر', description: 'اكتشف الأدب العربي والتقاليد الشعرية' }
+        }
+      },
+      {
+        slug: 'cultural-expressions',
+        translations: {
+          en: { name: 'Cultural Expressions', description: 'Idioms, proverbs, and cultural wisdom' },
+          ar: { name: 'التعابير الثقافية', description: 'الأمثال والحكم والتعابير الثقافية' }
+        }
+      },
+      {
+        slug: 'arabic-calligraphy',
+        translations: {
+          en: { name: 'Arabic Calligraphy', description: 'Learn about Arabic script and its artistic forms' },
+          ar: { name: 'الخط العربي', description: 'تعلم عن الكتابة العربية وأشكالها الفنية' }
         }
       },
       {
@@ -223,9 +371,9 @@ export class MemStorage implements IStorage {
         slug: categoryData.slug,
         createdAt: new Date(),
       };
-      
+
       this.categoriesStore.set(categoryId, category);
-      
+
       // Add translations for each language
       Object.entries(categoryData.translations).forEach(([langCode, translation]) => {
         const langId = languageMap.get(langCode);
@@ -236,12 +384,12 @@ export class MemStorage implements IStorage {
           this.categoryTranslationsStore.get(categoryId)?.set(langId, translation);
         }
       });
-      
+
       // Add subjects for each category
       this.addSubjectsForCategory(categoryId, categoryData.slug, languageMap);
     });
   }
-  
+
   private addSubjectsForCategory(categoryId: number, categorySlug: string, languageMap: Map<string, number>): void {
     const subjectsData: { [key: string]: any } = {
       'daily-conversations': [
@@ -377,7 +525,7 @@ export class MemStorage implements IStorage {
         },
       ],
     };
-    
+
     if (subjectsData[categorySlug]) {
       subjectsData[categorySlug].forEach((subjectData: any) => {
         const subjectId = this.currentSubjectId++;
@@ -387,9 +535,9 @@ export class MemStorage implements IStorage {
           categoryId: categoryId,
           createdAt: new Date(),
         };
-        
+
         this.subjectsStore.set(subjectId, subject);
-        
+
         // Add translations for each language
         Object.entries(subjectData.translations).forEach(([langCode, translation]) => {
           const langId = languageMap.get(langCode);
@@ -400,13 +548,13 @@ export class MemStorage implements IStorage {
             this.subjectTranslationsStore.get(subjectId)?.set(langId, translation as { name: string; description?: string });
           }
         });
-        
+
         // Add articles for this subject
         this.addArticlesForSubject(subjectId, subjectData.slug, languageMap);
       });
     }
   }
-  
+
   private addArticlesForSubject(subjectId: number, subjectSlug: string, languageMap: Map<string, number>): void {
     // Sample article content for each subject
     const articlesData: { [key: string]: any } = {
@@ -500,7 +648,7 @@ export class MemStorage implements IStorage {
                 <li><strong>Subject line:</strong> Should be clear, concise, and specific, e.g., "Meeting Request: Q3 Budget Review"</li>
                 <li><strong>Salutation:</strong> "Dear [Name]," (formal), "Hello [Name]," (semi-formal), "Hi [Name]," (informal)</li>
                 <li><strong>Opening:</strong> "I hope this email finds you well.", "I'm writing regarding..."</li>
-                <li><strong>Body:</strong> Keep paragraphs short and focused on one topic each</li>
+                <li><strong>Body: Keep paragraphs short and focused on one topic each</li>
                 <li><strong>Closing:</strong> "Thank you for your consideration.", "I look forward to your response."</li>
                 <li><strong>Sign-off:</strong> "Best regards,", "Sincerely,", "Kind regards,"</li>
               </ul>
@@ -534,7 +682,7 @@ export class MemStorage implements IStorage {
                 <li><strong>Ouverture:</strong> "J'espère que ce message vous trouve bien.", "Je vous écris concernant..."</li>
                 <li><strong>Corps:</strong> Gardez les paragraphes courts et concentrés sur un seul sujet chacun</li>
                 <li><strong>Conclusion:</strong> "Merci pour votre considération.", "J'attends votre réponse avec intérêt."</li>
-                <li><strong>Signature:</strong> "Cordialement,", "Sincèrement,", "Bien à vous,"</li>
+                                <li><strong>Signature:</strong> "Cordialement,", "Sincèrement,", "Bien à vous,"</li>
               </ul>
               <p>Relisez toujours vos emails avant de les envoyer et considérez votre ton. La communication écrite manque d'intonation vocale, alors soyez prudent avec l'humour ou le sarcasme qui pourraient être mal interprétés.</p>`,
               notes: 'N\'oubliez pas d\'adapter votre style en fonction de votre relation avec le destinataire.'
@@ -945,7 +1093,7 @@ export class MemStorage implements IStorage {
               notes: 'Üben Sie diese Phrasen, bevor Sie einen lokalen Markt besuchen.'
             }
           }
-        }
+        }        }
       ],
       'at-the-airport': [
         {
@@ -995,7 +1143,7 @@ export class MemStorage implements IStorage {
                 <li><strong>Carte d'embarquement :</strong> Document qui vous permet de monter à bord de l'avion</li>
                 <li><strong>Porte :</strong> Où vous embarquez pour votre vol</li>
                 <li><strong>Tableau des départs/arrivées :</strong> Écrans affichant les informations de vol</li>
-                <li><strong>Contrôle de sécurité :</strong> Où vos bagages sont scannés</li>
+                <li><strong>Contrôle de sécurité :</strong> Où vos bagagessont scannés</li>
                 <li><strong>Douane :</strong> Où vos documents et bagages peuvent être vérifiés à l'entrée d'un pays</li>
                 <li><strong>Récupération des bagages :</strong> Où vous récupérez vos bagages après un vol</li>
               </ul>
@@ -1385,10 +1533,10 @@ export class MemStorage implements IStorage {
               <p>Feiertage und Festivals bieten ein wunderbares Fenster in die Werte, Geschichte und Traditionen einer Kultur. Hier ist ein Überblick über einige wichtige Feierlichkeiten auf der ganzen Welt.</p>
               <h3>Bemerkenswerte Feiertage nach Land/Region</h3>
               <ul>
-                <li><strong>Chinesisches Neujahr:</strong> Der wichtigste Feiertag in der chinesischen Kultur, der den Beginn des Mondneujahrs mit Familientreffen, besonderen Mahlzeiten und roten Dekorationen für Glück markiert.</li>
+                <li><strong>Chinesisches Neujahr:</strong> Der wichtigste Feiertag in der chinesischen Kultur, der den Beginn des Mondneujahrs mit Familientreffen,besonderen Mahlzeiten und roten Dekorationen für Glück markiert.</li>
                 <li><strong>Diwali (Indien):</strong> Das Lichterfest, das von Hindus, Jains und Sikhs gefeiert wird und mit Lampen, Feuerwerk und Süßigkeiten den Sieg des Lichts über die Dunkelheit symbolisiert.</li>
                 <li><strong>Ramadan & Eid al-Fitr (Islamisch):</strong> Ein Monat des Fastens, gefolgt von einem Festmahl, das spirituelle Reflexion und Gemeinschaft betont.</li>
-                <li><strong>Karneval (Brasilien, Venedig, New Orleans):</strong> Feierlichkeiten vor der Fastenzeit mit Paraden, Musik, Tanz und aufwendigen Kostümen.</li>
+                <li><strong>Karneval (Brasilien, Venedig, New Orleans):</strong> Festivitäten vor der Fastenzeit mit Paraden, Musik, Tanz und aufwendigen Kostümen.</li>
                 <li><strong>Thanksgiving (USA, Kanada):</strong> Ein Erntefest, das mit Familientreffen und traditionellen Speisen Dankbarkeit feiert.</li>
               </ul>
               <p>Wenn Sie während eines wichtigen lokalen Feiertags reisen, recherchieren Sie im Voraus, da dies Auswirkungen auf Geschäftszeiten, Transport und Unterkunftsverfügbarkeit haben kann. Es kann jedoch auch einzigartige kulturelle Erfahrungen bieten, die zu anderen Zeiten nicht verfügbar sind.</p>`,
@@ -1439,8 +1587,7 @@ export class MemStorage implements IStorage {
               <ul>
                 <li><strong>Japon :</strong> Enlever ses chaussures avant d'entrer dans les maisons, éviter de planter les baguettes verticalement dans le riz, s'incliner en saluant.</li>
                 <li><strong>Moyen-Orient :</strong> S'habiller modestement, utiliser la main droite pour manger et donner des objets, demander la permission avant de prendre des photos de personnes.</li>
-                <li><strong>Inde :</strong> Enlever ses chaussures avant d'entrer dans les temples, éviter les manifestations publiques d'affection, utiliser sa main droite pour manger et donner/recevoir des objets.</li>
-                <li><strong>Amérique latine :</strong> Les salutations sont importantes et incluent souvent un contact physique, la ponctualité est moins stricte, les relations sont valorisées plus que les horaires.</li>
+                <li><strong>Inde :</strong> Enlever ses chaussures avant d'entrer dans les temples, éviter les manifestations publiques d'affection, utiliser sa main droite pour manger et donner/recevoir des objets.                <li><strong>Amérique latine :</strong> Les salutations sont importantes et incluent souvent un contact physique, la ponctualité est moins stricte, les relations sont valorisées plus que les horaires.</li>
                 <li><strong>Europe du Nord :</strong> La ponctualité est très valorisée, l'espace personnel est respecté, style de communication plus calme et plus réservé.</li>
               </ul>
               <p>N'oubliez pas que ce sont des généralisations et que les comportements individuels varient. Le plus important est d'aborder les nouvelles situations culturelles avec respect, humilité et volonté d'apprendre.</p>`,
@@ -1456,7 +1603,7 @@ export class MemStorage implements IStorage {
                 <li><strong>Oriente Medio:</strong> Vestir modestamente, usar la mano derecha para comer y dar objetos, pedir permiso antes de tomar fotos de personas.</li>
                 <li><strong>India:</strong> Quitarse los zapatos antes de entrar en los templos, evitar muestras públicas de afecto, usar la mano derecha para comer y dar/recibir objetos.</li>
                 <li><strong>América Latina:</strong> Los saludos son importantes y a menudo incluyen contacto físico, la puntualidad es menos estricta, las relaciones son valoradas por encima de los horarios.</li>
-                <li><strong>Europa del Norte:</strong> La puntualidad es muy valorada, se respeta el espacio personal, estilo de comunicación más tranquilo y reservado.</li>
+                <li><strong>Norte de Europa:</strong> La puntualidad es muy valorada, se respeta el espacio personal, estilo de comunicación más tranquilo y reservado.</li>
               </ul>
               <p>Recuerda que estas son generalizaciones y los comportamientos individuales varían. Lo más importante es abordar nuevas situaciones culturales con respeto, humildad y disposición para aprender.</p>`,
               notes: 'Investiga la etiqueta específica para los países que planeas visitar para mostrar respeto por las costumbres locales.'
@@ -1485,7 +1632,7 @@ export class MemStorage implements IStorage {
       articlesData[subjectSlug].forEach((articleData: any) => {
         const articleId = this.currentArticleId++;
         const authorId = 1; // Default to first user
-        
+
         const article = {
           id: articleId,
           slug: articleData.slug,
@@ -1497,9 +1644,9 @@ export class MemStorage implements IStorage {
           title: '', // Will be set from translations
           content: '', // Will be set from translations
         };
-        
+
         this.articlesStore.set(articleId, article);
-        
+
         // Add translations for each language
         Object.entries(articleData.translations).forEach(([langCode, translation]) => {
           const langId = languageMap.get(langCode);
@@ -1649,7 +1796,7 @@ export class MemStorage implements IStorage {
       .map(article => {
         const translations = this.articleTranslationsStore.get(article.id)?.get(language.id);
         const author = article.authorId ? this.usersStore.get(article.authorId) : undefined;
-        
+
         return {
           ...article,
           title: translations?.title || `Article ${article.id}`,
@@ -1856,6 +2003,41 @@ export class MemStorage implements IStorage {
     return Array.from(this.savedArticlesStore.values()).some(
       saved => saved.articleId === articleId && saved.userId === userId
     );
+  }
+
+  async getPendingArticles(): Promise<ArticleWithTranslation[]> {
+    const pendingArticles = Array.from(this.articlesStore.values())
+      .filter(article => article.status === 'pending');
+    
+    const result: ArticleWithTranslation[] = [];
+    for (const article of pendingArticles) {
+      const articleWithTranslation = await this.getArticleBySlug(article.slug, 'en');
+      if (articleWithTranslation) {
+        result.push(articleWithTranslation);
+      }
+    }
+    return result;
+  }
+
+  async approveArticle(articleId: number): Promise<void> {
+    const article = this.articlesStore.get(articleId);
+    if (article) {
+      article.status = 'approved';
+      article.publishedAt = new Date();
+      this.articlesStore.set(articleId, article);
+    }
+  }
+
+  async rejectArticle(articleId: number): Promise<void> {
+    const article = this.articlesStore.get(articleId);
+    if (article) {
+      article.status = 'rejected';
+      this.articlesStore.set(articleId, article);
+    }
+  }
+
+  async getAdminMessages(): Promise<Message[]> {
+    return Array.from(this.messagesStore.values());
   }
 
   async getSavedArticles(userId: number, languageCode: string): Promise<ArticleWithTranslation[]> {

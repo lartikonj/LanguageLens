@@ -178,6 +178,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin routes
+  app.get("/api/admin/pending-articles", async (req, res) => {
+    if (!req.isAuthenticated() || !(req.user as Express.User).isAdmin) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    const articles = await storage.getPendingArticles();
+    res.json(articles);
+  });
+
+  app.post("/api/admin/articles/:id/approve", async (req, res) => {
+    if (!req.isAuthenticated() || !(req.user as Express.User).isAdmin) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    const { id } = req.params;
+    await storage.approveArticle(parseInt(id));
+    res.sendStatus(200);
+  });
+
+  app.post("/api/admin/articles/:id/reject", async (req, res) => {
+    if (!req.isAuthenticated() || !(req.user as Express.User).isAdmin) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    const { id } = req.params;
+    await storage.rejectArticle(parseInt(id));
+    res.sendStatus(200);
+  });
+
+  app.get("/api/admin/messages", async (req, res) => {
+    if (!req.isAuthenticated() || !(req.user as Express.User).isAdmin) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    const messages = await storage.getAdminMessages();
+    res.json(messages);
+  });
+
   // Get saved articles
   app.get("/api/user/saved-articles", async (req, res) => {
     if (!req.isAuthenticated()) {
