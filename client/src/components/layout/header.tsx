@@ -25,13 +25,13 @@ const navigation = [
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [location] = useLocation();
-  
+
   // Use try-catch to safely handle the context not being available yet
   let auth: { user: any; logoutMutation: { mutate: () => void; isPending: boolean } } = { 
     user: null, 
     logoutMutation: { mutate: () => {}, isPending: false } 
   };
-  
+
   try {
     auth = useAuth();
   } catch (error) {
@@ -72,7 +72,7 @@ export default function Header() {
                 </div>
               </Link>
             </Button>
-            
+
             <nav className="hidden sm:ml-6 sm:flex sm:space-x-8" aria-label="Main navigation">
               {navigation.map((item) => (
                 <Link key={item.name} href={item.href}>
@@ -89,11 +89,11 @@ export default function Header() {
               ))}
             </nav>
           </div>
-          
+
           <div className="flex items-center space-x-2">
             <LanguageSwitcher />
             <ThemeToggle />
-            
+
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -137,7 +137,7 @@ export default function Header() {
                 <Button size="sm">Sign In</Button>
               </Link>
             )}
-            
+
             <div className="flex items-center sm:hidden">
               <Button
                 variant="ghost"
@@ -157,7 +157,7 @@ export default function Header() {
           </div>
         </div>
       </div>
-      
+
       {/* Mobile menu */}
       {mobileMenuOpen && (
         <div className="sm:hidden" id="mobile-menu">
